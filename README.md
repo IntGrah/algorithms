@@ -5,6 +5,7 @@ Implementations of common data structures and algorithms.
 ~~Strikethrough~~ = not implemented yet
 
 ### Sorting algorithms
+`com.intgrah.algorithms.Sort`
 - Insertion sort
 - Selection sort
 - Bubble sort
@@ -13,7 +14,9 @@ Implementations of common data structures and algorithms.
 - Heap sort
 
 ### Min-heaps
-An prefix "basic" indicates no support for decrease-key operations.
+`com.intgrah.algorithms.heap`
+
+The prefix `Basic` in the class name indicates no support for decrease-key operations.
 
 - Binary heap
 - Skew heap
@@ -40,6 +43,7 @@ An prefix "basic" indicates no support for decrease-key operations.
 - ~~Tango tree~~
 
 ### Shortest path
+`com.intgrah.algorithms.graph.path`
 - Dijkstra's algorithm
 - Bellman-Ford algorithm
 - ~~A\* algorithm~~
@@ -47,6 +51,7 @@ An prefix "basic" indicates no support for decrease-key operations.
 - Floyd-Warshall algorithm
 
 ### Minimum spanning tree
+`com.intgrah.algorithms.graph.mst`
 - Prim's algorithm
 - Kruskal's algorithm
 - ~~Reverse-delete algorithm~~
@@ -55,3 +60,10 @@ An prefix "basic" indicates no support for decrease-key operations.
 
 ### Disjoint set
 - Disjoint set forest
+
+### List
+- Linked list
+- Doubly linked list
+- ~~Sentinel doubly linked list~~
+- ~~Circular doubly linked list~~
+- ~~Skip list~~
