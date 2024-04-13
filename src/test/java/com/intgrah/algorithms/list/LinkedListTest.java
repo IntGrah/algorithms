@@ -1,6 +1,5 @@
 package com.intgrah.algorithms.list;
 
-import com.intgrah.algorithms.util.EmptyException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,7 +34,7 @@ public class LinkedListTest extends StackTest {
     }
 
     @Override
-    public LinkedList<Integer> getInstance() { return new LinkedList<>(); }
+    protected LinkedList<Integer> getInstance() {return new LinkedList<>(); }
 
     @Test
     public void appendEmptyTest() {
@@ -53,19 +52,19 @@ public class LinkedListTest extends StackTest {
         list3.append(list4);
 
         assertEquals(0, list3.size());
-        assertThrows(EmptyException.class, list3::getFront);
-        assertThrows(EmptyException.class, list3::getBack);
+        assertThrows(AssertionError.class, list3::getFront);
+        assertThrows(AssertionError.class, list3::getBack);
 
         assertEquals(0, list4.size());
-        assertThrows(EmptyException.class, list4::getFront);
-        assertThrows(EmptyException.class, list4::getBack);
+        assertThrows(AssertionError.class, list4::getFront);
+        assertThrows(AssertionError.class, list4::getBack);
     }
 
     @Test
     public void backTest() {
         LinkedList<Integer> list = getInstance();
 
-        assertThrows(EmptyException.class, list::getBack);
+        assertThrows(AssertionError.class, list::getBack);
 
         list.pushFront(1);
 

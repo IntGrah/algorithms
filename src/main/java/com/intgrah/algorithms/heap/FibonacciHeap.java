@@ -1,18 +1,20 @@
 package com.intgrah.algorithms.heap;
 
+import com.intgrah.algorithms.list.AbstractList;
 import com.intgrah.algorithms.list.DoublyLinkedList;
-import com.intgrah.algorithms.list.List;
-import com.intgrah.algorithms.util.EmptyException;
 
+import java.util.Comparator;
 import java.util.HashMap;
 
-public class FibonacciHeap<K extends Comparable<K>> implements Heap<K> {
+public class FibonacciHeap<K> extends DecreasableHeap<K> {
 
     private final DoublyLinkedList<Node> roots = new DoublyLinkedList<>();
     private Node min = null;
 
+    public FibonacciHeap(Comparator<K> ord) { super(ord); }
+
     @Override
-    public Decreasable<K> push(K k) {
+    public Decreasable pushRef(K k) {
         Node n = new Node(k);
         addRoot(n);
         return n;
@@ -22,33 +24,32 @@ public class FibonacciHeap<K extends Comparable<K>> implements Heap<K> {
         n.loser = false;
         n.parent = null;
         n.node = roots.pushBack(n);
-        if (min == null || n.key.compareTo(min.key) < 0) { min = n; }
+        if (min == null || ord.compare(n.key, min.key) < 0)
+            min = n;
     }
 
     @Override
-    public K popMin() throws EmptyException {
-        if (min == null) { throw new EmptyException(); }
+    public K getMin() {
+        assert !isEmpty();
+        return min.key;
+    }
+
+    @Override
+    public void deleteMin() {
+        assert !isEmpty();
         min.node.delete();
         roots.append(min.children);
         HashMap<Integer, Node> d = new HashMap<>();
         for (Node n : roots) {
             int deg = n.children.size();
             while (d.containsKey(deg))
-                n = n.merge(d.remove(deg));
+                n = n.link(d.remove(deg));
             d.put(deg, n);
         }
         roots.clear();
-        K minKey = min.key;
         min = null;
         for (Node n : d.values())
             addRoot(n);
-        return minKey;
-    }
-
-    @Override
-    public K getMin() throws EmptyException {
-        if (min == null) { throw new EmptyException(); }
-        return min.key;
     }
 
     @Override
@@ -60,20 +61,17 @@ public class FibonacciHeap<K extends Comparable<K>> implements Heap<K> {
         roots.clear();
     }
 
-    private class Node implements Heap.Decreasable<K> {
+    private class Node extends Decreasable {
 
         private final DoublyLinkedList<Node> children = new DoublyLinkedList<>();
-        private K key;
         private boolean loser = false;
         private Node parent = null;
-        private List.Deletable<Node> node;
+        private AbstractList<Node>.Deletable node;
 
-        private Node(K k) {
-            key = k;
-        }
+        private Node(K k) { super(k); }
 
-        private Node merge(Node n) {
-            if (key.compareTo(n.key) < 0) {
+        private Node link(Node n) {
+            if (ord.compare(key, n.key) < 0) {
                 n.parent = this;
                 n.node = children.pushBack(n);
                 return this;
@@ -85,14 +83,12 @@ public class FibonacciHeap<K extends Comparable<K>> implements Heap<K> {
         }
 
         @Override
-        public K getKey() { return key; }
-
-        @Override
-        public void decreaseKey(K k) throws KeyException {
-            if (k.compareTo(key) > 0) { throw new KeyException(); }
+        public void decreaseKey(K k) {
+            assert ord.compare(k, key) < 0;
             key = k;
             if (parent == null) {
-                if (k.compareTo(min.key) < 0) { min = this; }
+                if (ord.compare(k, min.key) < 0)
+                    min = this;
                 return;
             }
             Node n = this;
@@ -101,7 +97,8 @@ public class FibonacciHeap<K extends Comparable<K>> implements Heap<K> {
                 n.node.delete();
                 addRoot(n);
                 if (!p.loser) {
-                    if (p.parent != null) { p.loser = true; }
+                    if (p.parent != null)
+                        p.loser = true;
                     return;
                 }
                 n = p;

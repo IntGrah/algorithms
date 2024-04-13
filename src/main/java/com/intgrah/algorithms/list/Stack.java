@@ -1,17 +1,11 @@
 package com.intgrah.algorithms.list;
 
-import com.intgrah.algorithms.util.EmptyException;
+public interface Stack<T> extends List {
 
-public interface Stack<T> extends List<T> {
+    T getFront();
 
-    T getFront() throws EmptyException;
+    AbstractList<T>.Node pushFront(T v);
 
-    List.Node<T> pushFront(T v);
-
-    T popFront() throws EmptyException;
-
-    int size();
-
-    void clear();
+    T popFront();
 
 }

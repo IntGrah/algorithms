@@ -16,7 +16,7 @@ public class BellmanFord<V, W> extends ShortestPath<V, W> {
 
     public Map<V, W> path(
             Graph<V, W> g, V s
-    ) throws NegativeWeightCycleException {
+    ) throws NegativeCycleException {
         dist.clear();
         dist.put(s, osg.zero());
         for (int i = g.getVertices().size(); i > 0; i--)
@@ -28,7 +28,7 @@ public class BellmanFord<V, W> extends ShortestPath<V, W> {
                         W dvAlt = osg.add(du, g.getEdge(u, v));
                         if (dv == null || osg.compare(dvAlt, dv) < 0) {
                             if (i == 1) {
-                                throw new NegativeWeightCycleException();
+                                throw new NegativeCycleException();
                             } else {
                                 dist.put(v, dvAlt);
                             }
@@ -38,7 +38,7 @@ public class BellmanFord<V, W> extends ShortestPath<V, W> {
         return dist;
     }
 
-    public static class NegativeWeightCycleException extends RuntimeException {
+    public static class NegativeCycleException extends RuntimeException {
 
     }
 

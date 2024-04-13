@@ -1,18 +1,27 @@
 package com.intgrah.algorithms.heap;
 
-public interface Heap<K extends Comparable<K>> extends AbstractHeap<K, Heap.Decreasable<K>> {
+import java.util.Comparator;
 
-    interface Decreasable<K> {
+public abstract class Heap<K> {
 
-        K getKey();
+    protected final Comparator<K> ord;
 
-        void decreaseKey(K k) throws KeyException;
+    public Heap(Comparator<K> ord) { this.ord = ord; }
 
+    public abstract void push(K k);
+
+    public K popMin() {
+        K min = getMin();
+        deleteMin();
+        return min;
     }
 
+    abstract K getMin();
 
-    class KeyException extends RuntimeException {
+    abstract void deleteMin();
 
-    }
+    public abstract boolean isEmpty();
+
+    public abstract void clear();
 
 }

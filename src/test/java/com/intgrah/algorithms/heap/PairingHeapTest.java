@@ -1,10 +1,12 @@
 package com.intgrah.algorithms.heap;
 
-public class PairingHeapTest extends HeapTest {
+import java.util.Comparator;
+
+public class PairingHeapTest extends DecreasableHeapTest {
 
     @Override
-    public PairingHeap<Integer> getInstance() {
-        return new PairingHeap<>();
+    protected PairingHeap<Integer> getInstance() {
+        return new PairingHeap<Integer>(Comparator.naturalOrder());
     }
 
 }

@@ -3,7 +3,7 @@ package com.intgrah.algorithms.graph.mst;
 import com.intgrah.algorithms.set.DisjointSet;
 import com.intgrah.algorithms.set.DisjointSetForest;
 import com.intgrah.algorithms.graph.Graph;
-import com.intgrah.algorithms.graph.UndirectedAdjacencyListGraph;
+import com.intgrah.algorithms.graph.UndirectedHashMapGraph;
 
 import java.util.*;
 
@@ -17,7 +17,7 @@ public class Kruskal<V, W> extends MinimumSpanningTree<V, W> {
     }
 
     public Graph<V, W> minimumSpanningTree(Graph<V, W> g, V s) {
-        Graph<V, W> mst = new UndirectedAdjacencyListGraph<>();
+        Graph<V, W> mst = new UndirectedHashMapGraph<>();
         partition.clear();
         List<Edge> edges = new ArrayList<>();
         for (V u : g.getVertices()) {

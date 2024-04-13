@@ -1,33 +1,34 @@
 package com.intgrah.algorithms.graph.path;
 
 import com.intgrah.algorithms.graph.Graph;
+import com.intgrah.algorithms.heap.DecreasableHeap;
 import com.intgrah.algorithms.heap.PairingHeap;
-import com.intgrah.algorithms.heap.Heap;
 import com.intgrah.algorithms.util.OrderedSemigroup;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Dijkstra<V, W> extends ShortestPath<V, W> {
 
-    private final Heap<Item> q;
+    private final DecreasableHeap<Item> q;
     private final Map<V, W> dist = new HashMap<>();
-    private final Map<V, Heap.Decreasable<Item>> node = new HashMap<>();
+    private final Map<V, DecreasableHeap<Item>.Decreasable> node = new HashMap<>();
 
     public Dijkstra(OrderedSemigroup<W> osg) {
-        this(new PairingHeap<>(), osg);
+        this(new PairingHeap<>(Comparator.comparing(i -> i.distance, osg)), osg);
     }
 
-    public Dijkstra(Heap<Item> pq, OrderedSemigroup<W> osg) {
+    public Dijkstra(DecreasableHeap<Item> pq, OrderedSemigroup<W> osg) {
         super(osg);
         q = pq;
     }
 
     public Map<V, W> path(Graph<V, W> g, V s) {
         q.clear();
-        dist.clear();
         node.clear();
-        node.put(s, q.push(new Item(s, osg.zero())));
+        node.put(s, q.pushRef(new Item(s, osg.zero())));
+        dist.clear();
         dist.put(s, osg.zero());
         while (!q.isEmpty()) {
             Item item = q.popMin();
@@ -38,19 +39,17 @@ public class Dijkstra<V, W> extends ShortestPath<V, W> {
                 W dvAlt = osg.add(du, g.getEdge(u, v));
                 if (dv == null || osg.compare(dvAlt, dv) < 0) {
                     dist.put(v, dvAlt);
-                    Item iv = new Item(v, dvAlt);
-                    if (dv == null) {
-                        node.put(v, q.push(iv));
-                    } else {
-                        node.get(v).decreaseKey(iv);
-                    }
+                    if (dv == null)
+                        node.put(v, q.pushRef(new Item(v, dvAlt)));
+                    else
+                        node.get(v).decreaseKey(new Item(v, dvAlt));
                 }
             }
         }
         return dist;
     }
 
-    public class Item implements Comparable<Item> {
+    public class Item {
 
         private final V vertex;
         private final W distance;
@@ -58,11 +57,6 @@ public class Dijkstra<V, W> extends ShortestPath<V, W> {
         private Item(V v, W d) {
             vertex = v;
             distance = d;
-        }
-
-        @Override
-        public int compareTo(Dijkstra<V, W>.Item p) {
-            return osg.compare(distance, p.distance);
         }
 
     }

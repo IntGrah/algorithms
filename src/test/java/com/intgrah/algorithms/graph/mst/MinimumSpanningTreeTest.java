@@ -1,7 +1,7 @@
 package com.intgrah.algorithms.graph.mst;
 
 import com.intgrah.algorithms.graph.Graph;
-import com.intgrah.algorithms.graph.UndirectedAdjacencyListGraph;
+import com.intgrah.algorithms.graph.UndirectedHashMapGraph;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -13,7 +13,7 @@ public abstract class MinimumSpanningTreeTest {
     public void simpleTest() {
         MinimumSpanningTree<Integer, Integer> mstAlg = getInstance();
 
-        Graph<Integer, Integer> g = new UndirectedAdjacencyListGraph<>();
+        Graph<Integer, Integer> g = new UndirectedHashMapGraph<>();
         g.putVertex(0);
         g.putVertex(1);
         g.putVertex(2);
@@ -45,13 +45,13 @@ public abstract class MinimumSpanningTreeTest {
         assertEquals(2, mst.getEdge(3, 4));
     }
 
-    public abstract MinimumSpanningTree<Integer, Integer> getInstance();
+    protected abstract MinimumSpanningTree<Integer, Integer> getInstance();
 
     @Test
     public void anotherTest() {
         MinimumSpanningTree<Integer, Integer> mstAlg = getInstance();
 
-        Graph<Integer, Integer> g = new UndirectedAdjacencyListGraph<>();
+        Graph<Integer, Integer> g = new UndirectedHashMapGraph<>();
         g.putVertex(0);
         g.putVertex(1);
         g.putVertex(2);

@@ -1,6 +1,6 @@
 package com.intgrah.algorithms.graph.path;
 
-import com.intgrah.algorithms.graph.AdjacencyListGraph;
+import com.intgrah.algorithms.graph.HashMapGraph;
 import com.intgrah.algorithms.graph.Graph;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +12,7 @@ public class BellmanFordTest extends ShortestPathTest {
     public void negativeWeightCycleTest() {
         BellmanFord<Integer, Integer> bmf = getInstance();
 
-        Graph<Integer, Integer> g = new AdjacencyListGraph<>();
+        Graph<Integer, Integer> g = new HashMapGraph<>();
         g.putVertex(0);
         g.putVertex(1);
         g.putVertex(2);
@@ -22,11 +22,11 @@ public class BellmanFordTest extends ShortestPathTest {
         g.putEdge(2, 3, 5);
         g.putEdge(3, 1, -3);
 
-        assertThrows(BellmanFord.NegativeWeightCycleException.class, () -> bmf.path(g, 0));
+        assertThrows(BellmanFord.NegativeCycleException.class, () -> bmf.path(g, 0));
     }
 
     @Override
-    public BellmanFord<Integer, Integer> getInstance() {
+    protected BellmanFord<Integer, Integer> getInstance() {
         return new BellmanFord<>(getOSG());
     }
 

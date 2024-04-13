@@ -1,20 +1,21 @@
 package com.intgrah.algorithms.heap;
 
-import com.intgrah.algorithms.util.EmptyException;
-
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
-public class BinomialHeap<K extends Comparable<K>> implements Heap<K> {
+public class BinomialHeap<K> extends DecreasableHeap<K> {
 
     private final List<Node> roots = new ArrayList<>();
     private Node min = null;
 
+    public BinomialHeap(Comparator<K> ord) { super(ord); }
+
     @Override
-    public Decreasable<K> push(K k) {
+    public Decreasable pushRef(K k) {
         Node n = new Node(k);
         addTree(n);
-        if (min == null || n.key.compareTo(min.key) < 0) { min = n; }
+        if (min == null || ord.compare(n.key, min.key) < 0) { min = n; }
         return n;
     }
 
@@ -30,32 +31,27 @@ public class BinomialHeap<K extends Comparable<K>> implements Heap<K> {
     }
 
     @Override
-    public K popMin() throws EmptyException {
-        if (isEmpty()) { throw new EmptyException(); }
+    public K getMin() {
+        assert !isEmpty();
+        return min.key;
+    }
+
+    @Override
+    public void deleteMin() {
+        assert !isEmpty();
         roots.set(min.degree(), null);
         for (Node n : min.children) {
             n.parent = null;
             addTree(n);
         }
-        K minKey = min.key;
         min = null;
         for (Node n : roots)
-            if (n != null && (min == null || n.key.compareTo(min.key) < 0)) {
+            if (n != null && (min == null || ord.compare(n.key, min.key) < 0))
                 min = n;
-            }
-        return minKey;
     }
 
     @Override
-    public K getMin() throws EmptyException {
-        if (min == null) { throw new EmptyException(); }
-        return min.key;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return min == null;
-    }
+    public boolean isEmpty() { return min == null; }
 
     @Override
     public void clear() {
@@ -63,16 +59,15 @@ public class BinomialHeap<K extends Comparable<K>> implements Heap<K> {
         roots.clear();
     }
 
-    private class Node implements Heap.Decreasable<K> {
+    private class Node extends Decreasable {
 
-        private K key;
         private List<Node> children = new ArrayList<>();
         private Node parent = null;
 
-        private Node(K k) { key = k; }
+        private Node(K k) { super(k); }
 
         private Node merge(Node n) {
-            if (key.compareTo(n.key) < 0) {
+            if (ord.compare(key, n.key) < 0) {
                 children.add(n);
                 n.parent = this;
                 return this;
@@ -84,24 +79,21 @@ public class BinomialHeap<K extends Comparable<K>> implements Heap<K> {
         }
 
         @Override
-        public K getKey() { return key; }
-
-        @Override
-        public void decreaseKey(K k) throws KeyException {
-            if (k.compareTo(key) > 0) { throw new KeyException(); }
+        public void decreaseKey(K k) {
+            assert ord.compare(k, key) < 0;
             key = k;
-            if (k.compareTo(min.key) < 0) { min = this; }
-            while (parent != null && k.compareTo(parent.key) < 0) {
+            if (ord.compare(k, min.key) < 0)
+                min = this;
+            while (parent != null && ord.compare(k, parent.key) < 0) {
                 Node p = parent;
                 Node g = p.parent;
                 int nDeg = degree();
                 int pDeg = p.degree();
                 p.children.set(nDeg, p);
-                if (g == null) {
+                if (g == null)
                     roots.set(pDeg, this);
-                } else {
+                else
                     g.children.set(pDeg, this);
-                }
                 parent = g;
                 p.parent = this;
                 List<Node> pChildren = p.children;

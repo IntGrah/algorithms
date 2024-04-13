@@ -1,6 +1,5 @@
 package com.intgrah.algorithms.list;
 
-import com.intgrah.algorithms.util.EmptyException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,25 +34,28 @@ public class DoublyLinkedListTest extends StackTest {
     }
 
     @Override
-    public DoublyLinkedList<Integer> getInstance() { return new DoublyLinkedList<>(); }
+    protected DoublyLinkedList<Integer> getInstance() {
+        return new DoublyLinkedList<>();
+    }
 
     @Override
     @Test
     public void emptyExceptionTest() {
         DoublyLinkedList<Integer> list = getInstance();
 
-        assertThrows(EmptyException.class, list::popBack);
-        assertThrows(EmptyException.class, list::popFront);
+        assertThrows(AssertionError.class, list::popBack);
+        assertThrows(AssertionError.class, list::popFront);
     }
 
     @Test
     public void backTest() {
         DoublyLinkedList<Integer> list = getInstance();
 
-        assertThrows(EmptyException.class, list::getBack);
+        assertThrows(AssertionError.class, list::getBack);
 
         list.pushFront(1);
 
+        assertEquals(1, list.getFront());
         assertEquals(1, list.getBack());
 
         list.pushBack(2);

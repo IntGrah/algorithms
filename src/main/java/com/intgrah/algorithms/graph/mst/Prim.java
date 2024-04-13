@@ -1,8 +1,9 @@
 package com.intgrah.algorithms.graph.mst;
 
 import com.intgrah.algorithms.graph.Graph;
-import com.intgrah.algorithms.graph.UndirectedAdjacencyListGraph;
-import com.intgrah.algorithms.heap.Heap;
+import com.intgrah.algorithms.graph.UndirectedHashMapGraph;
+import com.intgrah.algorithms.heap.DecreasableHeap;
+import com.intgrah.algorithms.heap.PairingHeap;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -10,24 +11,28 @@ import java.util.Map;
 
 public class Prim<V, W> extends MinimumSpanningTree<V, W> {
 
-    private final Heap<Item> q;
+    private final DecreasableHeap<Item> q;
     private final Map<V, W> dist = new HashMap<>();
     private final Map<V, V> prev = new HashMap<>();
-    private final Map<V, Heap.Decreasable<Prim<V, W>.Item>> node = new HashMap<>();
+    private final Map<V, DecreasableHeap<Item>.Decreasable> node = new HashMap<>();
 
-    public Prim(Heap<Item> pq, Comparator<W> osg) {
+    public Prim(DecreasableHeap<Item> pq, Comparator<W> osg) {
         super(osg);
         q = pq;
     }
 
+    public Prim(Comparator<W> osg) {
+        this(new PairingHeap<>(Comparator.comparing(i -> i.distance, osg)), osg);
+    }
+
     public Graph<V, W> minimumSpanningTree(Graph<V, W> g, V s) {
-        Graph<V, W> mst = new UndirectedAdjacencyListGraph<>();
+        Graph<V, W> mst = new UndirectedHashMapGraph<>();
         prev.clear();
         dist.clear();
         dist.put(s, null);
         q.clear();
         node.clear();
-        node.put(s, q.push(new Item(s, null)));
+        node.put(s, q.pushRef(new Item(s, null)));
         while (!q.isEmpty()) {
             Item item = q.popMin();
             V u = item.vertex;
@@ -41,7 +46,7 @@ public class Prim<V, W> extends MinimumSpanningTree<V, W> {
                     prev.put(v, u);
                     Item iv = new Item(v, uv);
                     if (dv == null) {
-                        node.put(v, q.push(iv));
+                        node.put(v, q.pushRef(iv));
                     } else {
                         node.get(v).decreaseKey(iv);
                     }

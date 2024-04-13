@@ -1,6 +1,5 @@
 package com.intgrah.algorithms.list;
 
-import com.intgrah.algorithms.util.EmptyException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,12 +15,6 @@ public abstract class StackTest {
         stack.pushFront(1);
         stack.pushFront(0);
 
-        assertEquals(3, stack.size());
-
-        int i = 0;
-        for (int x : stack)
-            assertEquals(i++, x);
-
         assertEquals(0, stack.getFront());
 
         assertEquals(0, stack.popFront());
@@ -29,13 +22,13 @@ public abstract class StackTest {
         assertEquals(2, stack.popFront());
     }
 
-    public abstract Stack<Integer> getInstance();
+    protected abstract Stack<Integer> getInstance();
 
     @Test
     public void nodeTest() {
         Stack<Integer> list = getInstance();
 
-        List.Node<Integer> ref = list.pushFront(1);
+        AbstractList<Integer>.Node ref = list.pushFront(1);
 
         assertEquals(1, ref.getValue());
 
@@ -53,7 +46,7 @@ public abstract class StackTest {
 
         list.clear();
 
-        assertThrows(EmptyException.class, list::popFront);
+        assertThrows(AssertionError.class, list::popFront);
     }
 
 }

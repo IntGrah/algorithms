@@ -29,7 +29,7 @@ public class BTreeTest extends SearchTreeTest {
     }
 
     @Override
-    public BTree<Integer> getInstance() {
+    protected BTree<Integer> getInstance() {
         return new BTree<>(100);
     }
 

@@ -1,10 +1,10 @@
 package com.intgrah.algorithms.graph.path;
 
+import com.intgrah.algorithms.graph.HashMapGraph;
 import com.intgrah.algorithms.graph.Graph;
 import com.intgrah.algorithms.graph.GraphDecorator;
 import com.intgrah.algorithms.util.OrderedGroup;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class Johnson<V, W> extends AllShortestPaths<V, W> {
@@ -17,13 +17,12 @@ public class Johnson<V, W> extends AllShortestPaths<V, W> {
     }
 
     @Override
-    public Map<V, Map<V, W>> allPaths(
-            Graph<V, W> g
-    ) throws BellmanFord.NegativeWeightCycleException {
-        Map<V, Map<V, W>> dist = new HashMap<>();
+    public Graph<V, W> allPaths(Graph<V, W> g) throws BellmanFord.NegativeCycleException {
+        Graph<V, W> dist = new HashMapGraph<>();
         g.putVertex(null);
         for (V u : g.getVertices()) {
-            if (u != null) { dist.put(u, new HashMap<>()); }
+            if (u != null)
+                dist.putVertex(u);
             g.putEdge(null, u, osg.zero());
         }
 
@@ -44,7 +43,7 @@ public class Johnson<V, W> extends AllShortestPaths<V, W> {
             Map<V, W> dijkstraDist = dijkstra.path(aux, u);
             for (Map.Entry<V, W> e : dijkstraDist.entrySet()) {
                 V v = e.getKey();
-                dist.get(u).put(v, og.add(e.getValue(), og.sub(bmfDist.get(v), bmfDist.get(u))));
+                dist.putEdge(u, v, og.add(e.getValue(), og.sub(bmfDist.get(v), bmfDist.get(u))));
             }
         }
         return dist;

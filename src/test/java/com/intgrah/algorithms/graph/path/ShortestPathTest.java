@@ -1,7 +1,7 @@
 package com.intgrah.algorithms.graph.path;
 
-import com.intgrah.algorithms.graph.AdjacencyListGraph;
 import com.intgrah.algorithms.graph.Graph;
+import com.intgrah.algorithms.graph.HashMapGraph;
 import com.intgrah.algorithms.util.OrderedSemigroup;
 import org.junit.jupiter.api.Test;
 
@@ -11,22 +11,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public abstract class ShortestPathTest {
 
-    public OrderedSemigroup<Integer> getOSG() {
+    protected OrderedSemigroup<Integer> getOSG() {
         return new OrderedSemigroup<>() {
             @Override
-            public Integer zero() {
-                return 0;
-            }
+            public Integer zero() { return 0; }
 
             @Override
-            public Integer add(Integer a, Integer b) {
-                return a + b;
-            }
+            public Integer add(Integer a, Integer b) { return a + b; }
 
             @Override
-            public int compare(Integer a, Integer b) {
-                return a - b;
-            }
+            public int compare(Integer a, Integer b) { return a - b; }
         };
     }
 
@@ -34,7 +28,7 @@ public abstract class ShortestPathTest {
     public void simpleTest() {
         ShortestPath<Integer, Integer> shortestPath = getInstance();
 
-        Graph<Integer, Integer> g = new AdjacencyListGraph<>();
+        Graph<Integer, Integer> g = new HashMapGraph<>();
         g.putVertex(0);
         g.putVertex(1);
         g.putVertex(2);
@@ -60,13 +54,13 @@ public abstract class ShortestPathTest {
         assertEquals(7, d.get(4));
     }
 
-    public abstract ShortestPath<Integer, Integer> getInstance();
+    protected abstract ShortestPath<Integer, Integer> getInstance();
 
     @Test
     public void zeroWeightCycleTest() {
         ShortestPath<Integer, Integer> shortestPath = getInstance();
 
-        Graph<Integer, Integer> g = new AdjacencyListGraph<>();
+        Graph<Integer, Integer> g = new HashMapGraph<>();
         g.putVertex(0);
         g.putVertex(1);
         g.putVertex(2);

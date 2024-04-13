@@ -1,6 +1,6 @@
 package com.intgrah.algorithms.graph;
 
-public class UndirectedAdjacencyListGraph<V, W> extends AdjacencyListGraph<V, W> {
+public class UndirectedHashMapGraph<V, W> extends HashMapGraph<V, W> {
 
     @Override
     public void putEdge(V u, V v, W w) {

@@ -1,20 +1,11 @@
 package com.intgrah.algorithms.list;
 
-public interface List<T> extends Iterable<T> {
+public interface List {
 
-    interface Node<T> {
+    int size();
 
-        T getValue();
+    boolean isEmpty();
 
-        void setValue(T v);
-
-    }
-
-
-    interface Deletable<T> extends Node<T> {
-
-        void delete();
-
-    }
+    void clear();
 
 }

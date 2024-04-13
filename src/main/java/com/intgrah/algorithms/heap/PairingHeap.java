@@ -1,40 +1,42 @@
 package com.intgrah.algorithms.heap;
 
+import com.intgrah.algorithms.list.AbstractList;
 import com.intgrah.algorithms.list.DoublyLinkedList;
-import com.intgrah.algorithms.list.List;
-import com.intgrah.algorithms.util.EmptyException;
+import com.intgrah.algorithms.list.Queue;
 
-public class PairingHeap<K extends Comparable<K>> implements Heap<K> {
+import java.util.Comparator;
+
+public class PairingHeap<K> extends DecreasableHeap<K> {
 
     private Node root = null;
 
+    public PairingHeap(Comparator<K> ord) { super(ord); }
+
     @Override
-    public Decreasable<K> push(K k) {
+    public Decreasable pushRef(K k) {
         Node n = new Node(k);
-        if (root == null) {
-            root = n;
-        } else {
-            root = root.merge(n);
-        }
+        root = n.link(root);
         return n;
     }
 
     @Override
-    public K popMin() throws EmptyException {
-        if (root == null) { throw new EmptyException(); }
-        K minKey = root.key;
-        DoublyLinkedList<Node> children = root.children;
-        root = null;
-        for (Node n : children)
-            root = n.merge(root);
-        if (root != null) { root.node = null; }
-        return minKey;
+    public K getMin() {
+        assert !isEmpty();
+        return root.key;
     }
 
     @Override
-    public K getMin() throws EmptyException {
-        if (root == null) { throw new EmptyException(); }
-        return root.key;
+    public void deleteMin() {
+        assert !isEmpty();
+        Queue<Node> trees = root.children;
+        root = null;
+        int pairs = trees.size() / 2;
+        for (int i = 0; i < pairs; i++)
+            trees.pushBack(trees.popFront().link(trees.popFront()));
+        while (!trees.isEmpty())
+            root = trees.popFront().link(root);
+        if (root != null)
+            root.node = null;
     }
 
     @Override
@@ -43,31 +45,29 @@ public class PairingHeap<K extends Comparable<K>> implements Heap<K> {
     @Override
     public void clear() { root = null; }
 
-    private class Node implements Heap.Decreasable<K> {
+    private class Node extends Decreasable {
 
         private final DoublyLinkedList<Node> children = new DoublyLinkedList<>();
-        private K key;
-        private List.Deletable<Node> node;
+        private AbstractList<Node>.Deletable node;
 
-        private Node(K k) { key = k; }
-
-        @Override
-        public K getKey() { return key; }
+        private Node(K k) { super(k); }
 
         @Override
-        public void decreaseKey(K k) throws KeyException {
-            if (k.compareTo(key) > 0) { throw new KeyException(); }
+        public void decreaseKey(K k) {
+            assert ord.compare(k, key) < 0;
             key = k;
-            if (node != null) {
-                node.delete();
-                root = root.merge(this);
-                root.node = null;
-            }
+            if (this == root)
+                return;
+            node.delete();
+            root = link(root);
+            root.node = null;
         }
 
-        private Node merge(Node n) {
-            if (n == null) { return this; }
-            if (key.compareTo(n.key) < 0) {
+        private Node link(Node n) {
+            assert n != this;
+            if (n == null)
+                return this;
+            if (ord.compare(key, n.key) < 0) {
                 n.node = children.pushFront(n);
                 return this;
             } else {

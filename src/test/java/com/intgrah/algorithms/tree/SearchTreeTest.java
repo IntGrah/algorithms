@@ -24,7 +24,7 @@ public abstract class SearchTreeTest {
         }
     }
 
-    public abstract SearchTree<Integer> getInstance();
+    protected abstract SearchTree<Integer> getInstance();
 
     @Test
     public void sortedTest() {

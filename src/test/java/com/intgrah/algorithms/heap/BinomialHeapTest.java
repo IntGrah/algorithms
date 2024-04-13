@@ -1,10 +1,12 @@
 package com.intgrah.algorithms.heap;
 
-public class BinomialHeapTest extends HeapTest {
+import java.util.Comparator;
+
+public class BinomialHeapTest extends DecreasableHeapTest {
 
     @Override
     public BinomialHeap<Integer> getInstance() {
-        return new BinomialHeap<>();
+        return new BinomialHeap<Integer>(Comparator.naturalOrder());
     }
 
 }

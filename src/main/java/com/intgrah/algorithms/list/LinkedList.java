@@ -1,17 +1,14 @@
 package com.intgrah.algorithms.list;
 
-import com.intgrah.algorithms.util.EmptyException;
-
 import java.util.Iterator;
 
-public class LinkedList<T> implements Stack<T>, Queue<T> {
+public class LinkedList<T> extends AbstractList<T> implements Stack<T>, Queue<T> {
 
     private Node front;
     private Node back;
-    private transient int size = 0;
 
     public T getFront() {
-        if (size == 0) { throw new EmptyException(); }
+        assert !isEmpty();
         return front.value;
     }
 
@@ -19,20 +16,18 @@ public class LinkedList<T> implements Stack<T>, Queue<T> {
         Node n = new Node(value);
         n.next = front;
         front = n;
-        if (size++ == 0) { back = n; }
+        if (size++ == 0)
+            back = n;
         return n;
     }
 
     public T popFront() {
-        if (size == 0) { throw new EmptyException(); }
+        assert !isEmpty();
         Node f = front;
         front = f.next;
-        if (--size == 0) { back = null; }
+        if (--size == 0)
+            back = null;
         return f.value;
-    }
-
-    public int size() {
-        return size;
     }
 
     public void clear() {
@@ -41,28 +36,25 @@ public class LinkedList<T> implements Stack<T>, Queue<T> {
     }
 
     public T getBack() {
-        if (size == 0) { throw new EmptyException(); }
+        assert !isEmpty();
         return back.value;
     }
 
-    public List.Node<T> pushBack(T value) {
+    public AbstractList<T>.Node pushBack(T value) {
         Node n = new Node(value);
-        if (size++ == 0) {
+        if (size++ == 0)
             front = n;
-        } else {
+        else
             back.next = n;
-        }
         back = n;
         return n;
     }
 
     public void append(LinkedList<T> l) {
-        if (l.size == 0) { return; }
-        if (size == 0) {
+        if (size == 0)
             front = l.front;
-        } else {
+        else
             back.next = l.front;
-        }
         back = l.back;
         size += l.size;
         l.clear();
@@ -74,9 +66,7 @@ public class LinkedList<T> implements Stack<T>, Queue<T> {
             private Node n = front;
 
             @Override
-            public boolean hasNext() {
-                return n != null;
-            }
+            public boolean hasNext() { return n != null; }
 
             @Override
             public T next() {
@@ -87,24 +77,11 @@ public class LinkedList<T> implements Stack<T>, Queue<T> {
         };
     }
 
-    public class Node implements List.Node<T> {
+    public class Node extends AbstractList<T>.Node {
 
-        private T value;
         private Node next;
 
-        Node(T v) {
-            value = v;
-        }
-
-        @Override
-        public T getValue() {
-            return value;
-        }
-
-        @Override
-        public void setValue(T v) {
-            value = v;
-        }
+        Node(T v) { value = v; }
 
     }
 

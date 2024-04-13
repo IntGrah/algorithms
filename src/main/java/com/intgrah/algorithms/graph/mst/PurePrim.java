@@ -1,8 +1,9 @@
 package com.intgrah.algorithms.graph.mst;
 
 import com.intgrah.algorithms.graph.Graph;
-import com.intgrah.algorithms.graph.UndirectedAdjacencyListGraph;
-import com.intgrah.algorithms.heap.BasicHeap;
+import com.intgrah.algorithms.graph.UndirectedHashMapGraph;
+import com.intgrah.algorithms.heap.BinaryHeap;
+import com.intgrah.algorithms.heap.Heap;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -10,17 +11,17 @@ import java.util.Map;
 
 public class PurePrim<V, W> extends MinimumSpanningTree<V, W> {
 
-    private final BasicHeap<Item> q;
+    private final Heap<Item> q;
     private final Map<V, W> dist = new HashMap<>();
     private final Map<V, V> prev = new HashMap<>();
 
-    public PurePrim(BasicHeap<Item> pq, Comparator<W> c) {
-        super(c);
-        q = pq;
+    public PurePrim(Comparator<W> ord) {
+        super(ord);
+        q = new BinaryHeap<>(Comparator.comparing(i -> i.distance, ord));
     }
 
     public Graph<V, W> minimumSpanningTree(Graph<V, W> g, V s) {
-        Graph<V, W> mst = new UndirectedAdjacencyListGraph<>();
+        Graph<V, W> mst = new UndirectedHashMapGraph<>();
         prev.clear();
         dist.clear();
         dist.put(s, null);
@@ -29,12 +30,14 @@ public class PurePrim<V, W> extends MinimumSpanningTree<V, W> {
         while (!q.isEmpty()) {
             Item item = q.popMin();
             V u = item.vertex;
-            if (mst.getVertices().contains(u)) { continue; }
+            if (mst.getVertices().contains(u))
+                continue;
             mst.putVertex(u);
             for (V v : g.getNeighbors(u)) {
                 W uv = g.getEdge(u, v);
                 W dv = dist.get(v);
-                if (mst.getVertices().contains(v)) { continue; }
+                if (mst.getVertices().contains(v))
+                    continue;
                 if (dv == null || comp.compare(uv, dv) < 0) {
                     dist.put(v, uv);
                     prev.put(v, u);
@@ -49,7 +52,7 @@ public class PurePrim<V, W> extends MinimumSpanningTree<V, W> {
         return mst;
     }
 
-    public class Item implements Comparable<Item> {
+    public class Item {
 
         private final V vertex;
         private final W distance;
@@ -57,11 +60,6 @@ public class PurePrim<V, W> extends MinimumSpanningTree<V, W> {
         private Item(V v, W d) {
             vertex = v;
             distance = d;
-        }
-
-        @Override
-        public int compareTo(PurePrim<V, W>.Item p) {
-            return comp.compare(distance, p.distance);
         }
 
     }

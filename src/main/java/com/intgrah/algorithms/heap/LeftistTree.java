@@ -2,32 +2,32 @@ package com.intgrah.algorithms.heap;
 
 import com.intgrah.algorithms.list.LinkedList;
 import com.intgrah.algorithms.list.Stack;
-import com.intgrah.algorithms.util.EmptyException;
 
-public class BasicLeftistHeap<K extends Comparable<K>> implements BasicHeap<K> {
+import java.util.Comparator;
+
+public class LeftistTree<K> extends Heap<K> {
 
     private Node root;
 
+    public LeftistTree(Comparator<K> ord) {
+        super(ord);
+    }
+
     @Override
-    public Void push(K k) {
+    public void push(K k) {
         root = merge(root, new Node(k));
-        return null;
     }
 
     @Override
-    public K popMin() throws EmptyException {
-        if (root == null)
-            throw new EmptyException();
-        K min = root.key;
-        root = merge(root.left, root.right);
-        return min;
-    }
-
-    @Override
-    public K getMin() throws EmptyException {
-        if (root == null)
-            throw new EmptyException();
+    public K getMin() {
+        assert !isEmpty();
         return root.key;
+    }
+
+    @Override
+    public void deleteMin() {
+        assert !isEmpty();
+        root = merge(root.left, root.right);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class BasicLeftistHeap<K extends Comparable<K>> implements BasicHeap<K> {
             return m;
         Stack<Node> stack = new LinkedList<>();
         while (m != null && n != null) {
-            if (m.key.compareTo(n.key) <= 0) {
+            if (ord.compare(m.key, n.key) < 0) {
                 stack.pushFront(m);
                 m = m.right;
             } else {
@@ -52,7 +52,7 @@ public class BasicLeftistHeap<K extends Comparable<K>> implements BasicHeap<K> {
             }
         }
         Node x = m == null ? n : m;
-        while (stack.size() > 0) {
+        while (!stack.isEmpty()) {
             Node p = stack.popFront();
             if (p.left == null) {
                 p.left = x;

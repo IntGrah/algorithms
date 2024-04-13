@@ -1,19 +1,13 @@
 package com.intgrah.algorithms.list;
 
-import com.intgrah.algorithms.util.EmptyException;
+public interface Queue<T> extends List {
 
-public interface Queue<T> extends List<T> {
+    T getFront();
 
-    T getFront() throws EmptyException;
-
-    T popFront() throws EmptyException;
+    T popFront();
 
     T getBack();
 
-    List.Node<T> pushBack(T v);
-
-    int size();
-
-    void clear();
+    AbstractList<T>.Node pushBack(T v);
 
 }
