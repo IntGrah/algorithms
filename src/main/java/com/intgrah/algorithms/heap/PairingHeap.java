@@ -67,7 +67,7 @@ public class PairingHeap<K> extends DecreasableHeap<K> {
             assert n != this;
             if (n == null)
                 return this;
-            if (ord.compare(key, n.key) < 0) {
+            if (ord.compare(key, n.key) <= 0) {
                 n.node = children.pushFront(n);
                 return this;
             } else {

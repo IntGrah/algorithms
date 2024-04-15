@@ -11,31 +11,31 @@ import java.util.Map;
 
 public class BasicDijkstra<V, W> extends ShortestPath<V, W> {
 
-    private final Heap<Item> q;
+    private final Heap<Item> heap;
     private final Map<V, W> dist = new HashMap<>();
 
-    public BasicDijkstra(OrderedSemigroup<W> osg) {
-        super(osg);
-        q = new BinaryHeap<>(Comparator.comparing(i -> i.distance, osg));
+    public BasicDijkstra(Graph<V, W> g, OrderedSemigroup<W> osg) {
+        super(g, osg);
+        heap = new BinaryHeap<>(Comparator.comparing(i -> i.distance, osg));
     }
 
-    public Map<V, W> path(Graph<V, W> g, V s) {
-        q.clear();
-        q.push(new Item(s, osg.zero()));
+    public Map<V, W> path(V s) {
+        heap.clear();
+        heap.push(new Item(s, osg.zero()));
         dist.clear();
         dist.put(s, osg.zero());
-        while (!q.isEmpty()) {
-            Item item = q.popMin();
+        while (!heap.isEmpty()) {
+            Item item = heap.popMin();
             V u = item.vertex;
             W du = item.distance;
             if (osg.compare(du, dist.get(u)) > 0)
                 continue;
-            for (V v : g.getNeighbors(u)) {
+            for (V v : graph.getNeighbors(u)) {
                 W dv = dist.get(v);
-                W dvAlt = osg.add(du, g.getEdge(u, v));
+                W dvAlt = osg.add(du, graph.getEdge(u, v));
                 if (dv == null || osg.compare(dvAlt, dv) < 0) {
                     dist.put(v, dvAlt);
-                    q.push(new Item(v, dvAlt));
+                    heap.push(new Item(v, dvAlt));
                 }
             }
         }

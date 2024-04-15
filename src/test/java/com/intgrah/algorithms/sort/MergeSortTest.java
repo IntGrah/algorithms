@@ -5,6 +5,8 @@ import java.util.Comparator;
 public class MergeSortTest extends QuasiLinearSorterTest {
 
     @Override
-    protected MergeSort<Integer> getInstance(Comparator<Integer> ord) { return new MergeSort<>(ord); }
+    protected <T> MergeSort<T> getInstance(Comparator<T> ord) {
+        return new MergeSort<>(ord);
+    }
 
 }

@@ -5,10 +5,14 @@ import com.intgrah.algorithms.util.OrderedSemigroup;
 
 public abstract class AllShortestPaths<V, W> {
 
-    final OrderedSemigroup<W> osg;
+    protected final Graph<V, W> graph;
+    protected final OrderedSemigroup<W> osg;
 
-    public AllShortestPaths(OrderedSemigroup<W> osg) { this.osg = osg; }
+    public AllShortestPaths(Graph<V, W> g, OrderedSemigroup<W> osg) {
+        graph = g;
+        this.osg = osg;
+    }
 
-    public abstract Graph<V, W> allPaths(Graph<V, W> g);
+    public abstract Graph<V, W> allPaths();
 
 }

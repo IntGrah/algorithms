@@ -25,7 +25,7 @@ The prefix `Basic` in the class name indicates no support for decrease-key opera
 - Skew heap
 - Leftist heap
 - Binomial heap
-- ~~Skew binomial heap~~
+- Skew binomial heap
 - Pairing heap
 - Fibonacci heap
 - ~~Strict Fibonacci heap~~
@@ -54,7 +54,6 @@ The prefix `Basic` in the class name indicates no support for decrease-key opera
 
 - Dijkstra's algorithm
 - Bellman-Ford algorithm
-- ~~A\* algorithm~~
 - Johnson's algorithm
 - Floyd-Warshall algorithm
 

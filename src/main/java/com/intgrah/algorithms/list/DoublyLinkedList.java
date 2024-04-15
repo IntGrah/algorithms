@@ -18,7 +18,7 @@ public class DoublyLinkedList<T> extends AbstractList<T> implements Deque<T> {
         assert !isEmpty();
         Node f = front;
         front = f.next;
-        if (size-- == 1)
+        if (--size == 0)
             back = null;
         else
             front.prev = null;
@@ -66,7 +66,8 @@ public class DoublyLinkedList<T> extends AbstractList<T> implements Deque<T> {
     }
 
     public void append(DoublyLinkedList<T> l) {
-        if (l.size == 0) { return; }
+        if (l.size == 0)
+            return;
         if (size == 0) {
             front = l.front;
         } else {
@@ -105,15 +106,11 @@ public class DoublyLinkedList<T> extends AbstractList<T> implements Deque<T> {
 
         private Node prev;
         private Node next;
-        private boolean deleted = false;
 
         private Node(T v) { value = v; }
 
         @Override
         public void delete() {
-            if (deleted)
-                return;
-            deleted = true;
             if (prev == null)
                 front = next;
             else

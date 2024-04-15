@@ -34,7 +34,7 @@ public class DoublyLinkedListTest extends StackTest {
     }
 
     @Override
-    protected DoublyLinkedList<Integer> getInstance() {
+    protected <T> DoublyLinkedList<T> getInstance() {
         return new DoublyLinkedList<>();
     }
 

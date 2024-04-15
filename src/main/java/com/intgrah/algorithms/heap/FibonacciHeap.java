@@ -84,7 +84,7 @@ public class FibonacciHeap<K> extends DecreasableHeap<K> {
 
         @Override
         public void decreaseKey(K k) {
-            assert ord.compare(k, key) < 0;
+            assert ord.compare(k, key) <= 0;
             key = k;
             if (parent == null) {
                 if (ord.compare(k, min.key) < 0)

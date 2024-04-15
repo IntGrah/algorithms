@@ -25,11 +25,9 @@ public abstract class SorterTest {
         assertSorted(a);
     }
 
-    protected abstract Sorter<Integer> getInstance(Comparator<Integer> ord);
+    protected abstract <T> Sorter<T> getInstance(Comparator<T> ord);
 
-    protected int getSize() {
-        return 1000;
-    }
+    protected int getSize() { return 1000; }
 
     public static void assertSorted(Integer[] a) {
         for (int i = 0; i < a.length - 1; i++)

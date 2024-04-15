@@ -7,12 +7,14 @@ import java.util.Map;
 
 public abstract class ShortestPath<V, W> {
 
-    final OrderedSemigroup<W> osg;
+    protected final Graph<V, W> graph;
+    protected final OrderedSemigroup<W> osg;
 
-    public ShortestPath(OrderedSemigroup<W> osg) {
+    public ShortestPath(Graph<V, W> g, OrderedSemigroup<W> osg) {
+        graph = g;
         this.osg = osg;
     }
 
-    public abstract Map<V, W> path(Graph<V, W> g, V s);
+    public abstract Map<V, W> path(V s);
 
 }

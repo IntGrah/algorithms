@@ -13,7 +13,7 @@ public class EdmondsKarp<V, W> extends FordFulkerson<V, W> {
     public EdmondsKarp(OrderedGroup<W> og) { super(og); }
 
     @Override
-    protected Iterable<V> augmentingPath(Graph<V, W> flow, Graph<V, W> capacity, V s, V t) {
+    protected Iterable<V> augmentingPath(Graph<V, W> residual, V s, V t) {
         Queue<V> q = new LinkedList<>();
         q.pushBack(s);
         Map<V, V> prev = new HashMap<>();
@@ -24,10 +24,10 @@ public class EdmondsKarp<V, W> extends FordFulkerson<V, W> {
             if (prev.containsKey(t))
                 break;
             V u = q.popFront();
-            for (V v : flow.getNeighbors(u)) {
+            for (V v : residual.getNeighbors(u)) {
                 if (v == s || prev.containsKey(v))
                     continue;
-                if (og.compare(flow.getEdge(u, v), capacity.getEdge(u, v)) < 0) {
+                if (og.compare(residual.getEdge(u, v), og.zero()) > 0) {
                     prev.put(v, u);
                     q.pushBack(v);
                 }

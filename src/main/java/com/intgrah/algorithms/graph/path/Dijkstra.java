@@ -11,36 +11,32 @@ import java.util.Map;
 
 public class Dijkstra<V, W> extends ShortestPath<V, W> {
 
-    private final DecreasableHeap<Item> q;
+    private final DecreasableHeap<Item> heap;
     private final Map<V, W> dist = new HashMap<>();
     private final Map<V, DecreasableHeap<Item>.Decreasable> node = new HashMap<>();
 
-    public Dijkstra(OrderedSemigroup<W> osg) {
-        this(new PairingHeap<>(Comparator.comparing(i -> i.distance, osg)), osg);
+    public Dijkstra(Graph<V, W> g, OrderedSemigroup<W> osg) {
+        super(g, osg);
+        heap = new PairingHeap<>(Comparator.comparing(i -> i.distance, osg));
     }
 
-    public Dijkstra(DecreasableHeap<Item> pq, OrderedSemigroup<W> osg) {
-        super(osg);
-        q = pq;
-    }
-
-    public Map<V, W> path(Graph<V, W> g, V s) {
-        q.clear();
+    public Map<V, W> path(V s) {
+        heap.clear();
         node.clear();
-        node.put(s, q.pushRef(new Item(s, osg.zero())));
+        node.put(s, heap.pushRef(new Item(s, osg.zero())));
         dist.clear();
         dist.put(s, osg.zero());
-        while (!q.isEmpty()) {
-            Item item = q.popMin();
+        while (!heap.isEmpty()) {
+            Item item = heap.popMin();
             V u = item.vertex;
             W du = item.distance;
-            for (V v : g.getNeighbors(u)) {
+            for (V v : graph.getNeighbors(u)) {
                 W dv = dist.get(v);
-                W dvAlt = osg.add(du, g.getEdge(u, v));
+                W dvAlt = osg.add(du, graph.getEdge(u, v));
                 if (dv == null || osg.compare(dvAlt, dv) < 0) {
                     dist.put(v, dvAlt);
                     if (dv == null)
-                        node.put(v, q.pushRef(new Item(v, dvAlt)));
+                        node.put(v, heap.pushRef(new Item(v, dvAlt)));
                     else
                         node.get(v).decreaseKey(new Item(v, dvAlt));
                 }

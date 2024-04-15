@@ -6,12 +6,14 @@ import java.util.Comparator;
 
 public abstract class MinimumSpanningTree<V, W> {
 
-    final Comparator<W> comp;
+    protected final Graph<V, W> graph;
+    protected final Comparator<W> ord;
 
-    public MinimumSpanningTree(Comparator<W> c) {
-        comp = c;
+    public MinimumSpanningTree(Graph<V, W> g, Comparator<W> ord) {
+        graph = g;
+        this.ord = ord;
     }
 
-    public abstract Graph<V, W> minimumSpanningTree(Graph<V, W> g, V s);
+    public abstract Graph<V, W> minimumSpanningTree(V s);
 
 }

@@ -12,7 +12,7 @@ public class FibonacciHeapTest extends DecreasableHeapTest {
 
     @Test
     public void cascadingCutTest() {
-        FibonacciHeap<Integer> pq = getInstance();
+        FibonacciHeap<Integer> pq = getInstance(Integer::compareTo);
 
         int n = 100;
         List<DecreasableHeap<Integer>.Decreasable> cutMeOff = new ArrayList<>();
@@ -51,8 +51,8 @@ public class FibonacciHeapTest extends DecreasableHeapTest {
     }
 
     @Override
-    protected FibonacciHeap<Integer> getInstance() {
-        return new FibonacciHeap<Integer>(Comparator.naturalOrder());
+    protected <T> FibonacciHeap<T> getInstance(Comparator<T> ord) {
+        return new FibonacciHeap<>(ord);
     }
 
 }

@@ -3,6 +3,7 @@ package com.intgrah.algorithms.heap;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,7 +13,7 @@ public abstract class DecreasableHeapTest extends HeapTest {
 
     @Test
     public void simpleTest() {
-        DecreasableHeap<Integer> pq = getInstance();
+        DecreasableHeap<Integer> pq = getInstance(Integer::compareTo);
 
         DecreasableHeap<Integer>.Decreasable n5 = pq.pushRef(5);
         pq.push(6);
@@ -38,11 +39,11 @@ public abstract class DecreasableHeapTest extends HeapTest {
     }
 
     @Override
-    protected abstract DecreasableHeap<Integer> getInstance();
+    protected abstract <T> DecreasableHeap<T> getInstance(Comparator<T> ord);
 
     @Test
     public void test() {
-        DecreasableHeap<Integer> pq = getInstance();
+        DecreasableHeap<Integer> pq = getInstance(Integer::compareTo);
 
         List<DecreasableHeap<Integer>.Decreasable> nodes = new ArrayList<>(1000);
         for (int i = 0, k = 712; i < 1000; i++) {
@@ -59,7 +60,7 @@ public abstract class DecreasableHeapTest extends HeapTest {
 
     @Test
     public void keyExceptionTest() {
-        DecreasableHeap<Integer> pq = getInstance();
+        DecreasableHeap<Integer> pq = getInstance(Integer::compareTo);
 
         DecreasableHeap<Integer>.Decreasable n4 = pq.pushRef(4);
 

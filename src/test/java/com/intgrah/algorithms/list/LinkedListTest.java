@@ -34,7 +34,9 @@ public class LinkedListTest extends StackTest {
     }
 
     @Override
-    protected LinkedList<Integer> getInstance() {return new LinkedList<>(); }
+    protected <T> LinkedList<T> getInstance() {
+        return new LinkedList<>();
+    }
 
     @Test
     public void appendEmptyTest() {

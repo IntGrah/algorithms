@@ -5,8 +5,8 @@ import java.util.Comparator;
 public class BinomialHeapTest extends DecreasableHeapTest {
 
     @Override
-    public BinomialHeap<Integer> getInstance() {
-        return new BinomialHeap<Integer>(Comparator.naturalOrder());
+    public <T> BinomialHeap<T> getInstance(Comparator<T> ord) {
+        return new BinomialHeap<>(ord);
     }
 
 }

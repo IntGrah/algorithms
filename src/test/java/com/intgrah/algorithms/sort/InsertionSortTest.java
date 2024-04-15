@@ -5,7 +5,7 @@ import java.util.Comparator;
 public class InsertionSortTest extends SorterTest {
 
     @Override
-    protected InsertionSort<Integer> getInstance(Comparator<Integer> ord) {
+    protected <T> InsertionSort<T> getInstance(Comparator<T> ord) {
         return new InsertionSort<>(ord);
     }
 

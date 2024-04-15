@@ -5,6 +5,8 @@ import java.util.Comparator;
 public class HeapSortTest extends QuasiLinearSorterTest {
 
     @Override
-    protected HeapSort<Integer> getInstance(Comparator<Integer> ord) { return new HeapSort<>(ord); }
+    protected <T> HeapSort<T> getInstance(Comparator<T> ord) {
+        return new HeapSort<>(ord);
+    }
 
 }

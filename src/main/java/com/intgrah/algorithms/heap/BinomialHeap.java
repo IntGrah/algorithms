@@ -15,18 +15,30 @@ public class BinomialHeap<K> extends DecreasableHeap<K> {
     public Decreasable pushRef(K k) {
         Node n = new Node(k);
         addTree(n);
-        if (min == null || ord.compare(n.key, min.key) < 0) { min = n; }
+        if (min == null || ord.compare(n.key, min.key) < 0)
+            min = n;
         return n;
     }
 
     private void addTree(Node n) {
         int deg = n.degree();
         while (deg < roots.size() && roots.get(deg) != null)
-            n = n.merge(roots.set(deg++, null));
-        if (deg == roots.size()) {
+            n = link(n, roots.set(deg++, null));
+        if (deg == roots.size())
             roots.add(n);
-        } else {
+        else
             roots.set(deg, n);
+    }
+
+    private Node link(Node m, Node n) {
+        if (ord.compare(m.key, n.key) < 0) {
+            m.children.add(n);
+            n.parent = m;
+            return m;
+        } else {
+            n.children.add(m);
+            m.parent = n;
+            return n;
         }
     }
 
@@ -66,21 +78,9 @@ public class BinomialHeap<K> extends DecreasableHeap<K> {
 
         private Node(K k) { super(k); }
 
-        private Node merge(Node n) {
-            if (ord.compare(key, n.key) < 0) {
-                children.add(n);
-                n.parent = this;
-                return this;
-            } else {
-                n.children.add(this);
-                parent = n;
-                return n;
-            }
-        }
-
         @Override
         public void decreaseKey(K k) {
-            assert ord.compare(k, key) < 0;
+            assert ord.compare(k, key) <= 0;
             key = k;
             if (ord.compare(k, min.key) < 0)
                 min = this;

@@ -15,14 +15,16 @@ public abstract class FordFulkerson<V, W> {
 
     public Graph<V, W> maxFlow(Graph<V, W> capacity, V s, V t) {
         assert s != t;
-        capacity = new GraphDecorator<>(capacity) {
+        Graph<V, W> flow = new HashMapGraph<>();
+        Graph<V, W> residual = new GraphDecorator<>(flow) {
             @Override
             public W getEdge(V u, V v) {
-                W w = super.getEdge(u, v);
-                return w == null ? og.zero() : w;
+                W f = super.getEdge(u, v);
+                W c = capacity.getEdge(u, v);
+                if (c == null) return og.neg(f);
+                else return og.sub(c, f);
             }
         };
-        Graph<V, W> flow = new HashMapGraph<>();
         for (V u : capacity.getVertices())
             flow.putVertex(u);
         for (V u : capacity.getVertices()) {
@@ -32,40 +34,35 @@ public abstract class FordFulkerson<V, W> {
             }
         }
         while (true) {
-            for (V u : capacity.getVertices()) {
-                for (V v : capacity.getNeighbors(u)) {
-                    System.out.printf("%s %s: %s\n", u, v, flow.getEdge(u, v));
-                }
-            }
-            Iterable<V> path = augmentingPath(flow, capacity, s, t);
+            Iterable<V> path = augmentingPath(residual, s, t);
             if (path == null)
                 return flow;
             W df = null;
-            Iterator<V> iter = path.iterator();
-            if (iter.hasNext()) {
-                V u = iter.next();
-                while (iter.hasNext()) {
-                    V v = iter.next();
-                    W altDf = og.sub(capacity.getEdge(u, v), flow.getEdge(u, v));
-                    if (df == null || og.compare(altDf, df) < 0)
-                        df = altDf;
-                    u = v;
-                }
+            Iterator<V> us = path.iterator();
+            Iterator<V> vs = path.iterator();
+            vs.next();
+            while (vs.hasNext()) {
+                V u = us.next();
+                V v = vs.next();
+                W altDf = residual.getEdge(u, v);
+                if (df == null || og.compare(altDf, df) < 0)
+                    df = altDf;
             }
 
-            iter = path.iterator();
-            if (iter.hasNext()) {
-                V u = iter.next();
-                while (iter.hasNext()) {
-                    V v = iter.next();
-                    flow.putEdge(u, v, og.add(flow.getEdge(u, v), df));
-                    flow.putEdge(v, u, og.sub(flow.getEdge(v, u), df));
-                    u = v;
-                }
+            us = path.iterator();
+            vs = path.iterator();
+            vs.next();
+            while (vs.hasNext()) {
+                V u = us.next();
+                V v = vs.next();
+                flow.putEdge(u, v, og.add(flow.getEdge(u, v), df));
+                flow.putEdge(v, u, og.sub(flow.getEdge(v, u), df));
             }
         }
     }
 
-    protected abstract Iterable<V> augmentingPath(Graph<V, W> flow, Graph<V, W> capacity, V s, V t);
+    protected abstract Iterable<V> augmentingPath(
+            Graph<V, W> residual, V s, V t
+    );
 
 }

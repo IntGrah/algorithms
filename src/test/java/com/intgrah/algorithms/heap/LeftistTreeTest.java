@@ -5,8 +5,8 @@ import java.util.Comparator;
 public class LeftistTreeTest extends HeapTest {
 
     @Override
-    protected LeftistTree<Integer> getInstance() {
-        return new LeftistTree<Integer>(Comparator.naturalOrder());
+    protected <T> LeftistTree<T> getInstance(Comparator<T> ord) {
+        return new LeftistTree<>(ord);
     }
 
 }

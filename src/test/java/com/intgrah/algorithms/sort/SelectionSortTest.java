@@ -5,7 +5,7 @@ import java.util.Comparator;
 public class SelectionSortTest extends SorterTest {
 
     @Override
-    protected SelectionSort<Integer> getInstance(Comparator<Integer> ord) {
+    protected <T> SelectionSort<T> getInstance(Comparator<T> ord) {
         return new SelectionSort<>(ord);
     }
 

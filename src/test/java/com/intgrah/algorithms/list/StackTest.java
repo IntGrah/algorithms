@@ -22,7 +22,7 @@ public abstract class StackTest {
         assertEquals(2, stack.popFront());
     }
 
-    protected abstract Stack<Integer> getInstance();
+    protected abstract <T> Stack<T> getInstance();
 
     @Test
     public void nodeTest() {

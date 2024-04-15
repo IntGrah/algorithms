@@ -5,6 +5,8 @@ import java.util.Comparator;
 public class QuickSortTest extends QuasiLinearSorterTest {
 
     @Override
-    protected QuickSort<Integer> getInstance(Comparator<Integer> ord) { return new QuickSort<>(ord); }
+    protected <T> QuickSort<T> getInstance(Comparator<T> ord) {
+        return new QuickSort<>(ord);
+    }
 
 }

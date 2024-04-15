@@ -5,7 +5,7 @@ import java.util.Comparator;
 public class BubbleSortTest extends SorterTest {
 
     @Override
-    protected BubbleSort<Integer> getInstance(Comparator<Integer> ord) {
+    protected <T> BubbleSort<T> getInstance(Comparator<T> ord) {
         return new BubbleSort<>(ord);
     }
 
