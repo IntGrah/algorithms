@@ -1,6 +1,6 @@
 package com.intgrah.algorithms.heap;
 
-import com.intgrah.algorithms.list.AbstractList;
+import com.intgrah.algorithms.list.Deletable;
 import com.intgrah.algorithms.list.DoublyLinkedList;
 import com.intgrah.algorithms.list.LinkedList;
 
@@ -21,14 +21,14 @@ public class SkewBinomialHeap<K> extends Heap<K> {
             Node n = roots.popFront();
             if (m.rank == n.rank) {
                 Node s = skewLink(l, m, n);
-                s.node = roots.pushFront(s);
+                s.ref = roots.pushFront(s);
             } else {
-                n.node = roots.pushFront(n);
-                m.node = roots.pushFront(m);
-                l.node = roots.pushFront(l);
+                n.ref = roots.pushFront(n);
+                m.ref = roots.pushFront(m);
+                l.ref = roots.pushFront(l);
             }
         } else {
-            l.node = roots.pushFront(l);
+            l.ref = roots.pushFront(l);
         }
         if (min == null || ord.compare(l.key, min.key) < 0)
             min = l;
@@ -43,13 +43,13 @@ public class SkewBinomialHeap<K> extends Heap<K> {
     @Override
     public void deleteMin() {
         assert !isEmpty();
-        min.node.delete();
-        DoublyLinkedList<K> zero = new DoublyLinkedList<>();
+        min.ref.delete();
+        LinkedList<K> zero = new LinkedList<>();
         DoublyLinkedList<Node> nonZero = new DoublyLinkedList<>();
         while (!min.children.isEmpty()) {
             Node n = min.children.popFront();
             if (n.rank == 0)
-                zero.pushBack(n.key);
+                zero.pushFront(n.key);
             else
                 nonZero.pushBack(n);
         }
@@ -100,7 +100,7 @@ public class SkewBinomialHeap<K> extends Heap<K> {
         unique(h);
         if (roots.isEmpty()) {
             for (Node n : h)
-                n.node = roots.pushBack(n);
+                n.ref = roots.pushBack(n);
             return;
         }
         Node t1 = roots.getFront();
@@ -108,17 +108,17 @@ public class SkewBinomialHeap<K> extends Heap<K> {
         if (t1.rank < t2.rank) {
             t1 = roots.popFront();
             merge(h);
-            t1.node = roots.pushFront(t1);
+            t1.ref = roots.pushFront(t1);
         } else if (t1.rank > t2.rank) {
             t2 = h.popFront();
             merge(h);
-            t2.node = roots.pushFront(t2);
+            t2.ref = roots.pushFront(t2);
         } else {
             t1 = roots.popFront();
             t2 = h.popFront();
             Node s = simpleLink(t1, t2);
             merge(h);
-            s.node = roots.pushFront(s);
+            s.ref = roots.pushFront(s);
             unique(roots);
         }
     }
@@ -129,10 +129,10 @@ public class SkewBinomialHeap<K> extends Heap<K> {
             Node n = l.popFront();
             if (m.rank == n.rank) {
                 Node s = simpleLink(m, n);
-                s.node = l.pushFront(s);
+                s.ref = l.pushFront(s);
             } else {
-                n.node = l.pushFront(n);
-                m.node = l.pushFront(m);
+                n.ref = l.pushFront(n);
+                m.ref = l.pushFront(m);
                 return;
             }
         }
@@ -155,7 +155,7 @@ public class SkewBinomialHeap<K> extends Heap<K> {
 
         private final K key;
         private final LinkedList<Node> children = new LinkedList<>();
-        private AbstractList<Node>.Deletable node;
+        private Deletable ref;
         private int rank;
 
         private Node(K k, int r) {

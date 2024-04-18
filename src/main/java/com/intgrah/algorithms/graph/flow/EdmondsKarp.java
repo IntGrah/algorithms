@@ -2,7 +2,6 @@ package com.intgrah.algorithms.graph.flow;
 
 import com.intgrah.algorithms.graph.Graph;
 import com.intgrah.algorithms.list.LinkedList;
-import com.intgrah.algorithms.list.Queue;
 import com.intgrah.algorithms.util.OrderedGroup;
 
 import java.util.HashMap;
@@ -14,7 +13,7 @@ public class EdmondsKarp<V, W> extends FordFulkerson<V, W> {
 
     @Override
     protected Iterable<V> augmentingPath(Graph<V, W> residual, V s, V t) {
-        Queue<V> q = new LinkedList<>();
+        LinkedList<V> q = new LinkedList<>();
         q.pushBack(s);
         Map<V, V> prev = new HashMap<>();
         prev.put(s, null);

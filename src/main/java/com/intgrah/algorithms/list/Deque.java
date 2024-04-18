@@ -1,6 +1,6 @@
 package com.intgrah.algorithms.list;
 
-public interface Deque<T> extends Queue<T>, Stack<T> {
+public interface Deque<T, R> extends Queue<T, R>, Stack<T, R> {
 
     T getBack();
 

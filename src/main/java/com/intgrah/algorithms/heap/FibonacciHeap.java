@@ -1,6 +1,6 @@
 package com.intgrah.algorithms.heap;
 
-import com.intgrah.algorithms.list.AbstractList;
+import com.intgrah.algorithms.list.Deletable;
 import com.intgrah.algorithms.list.DoublyLinkedList;
 
 import java.util.Comparator;
@@ -23,7 +23,7 @@ public class FibonacciHeap<K> extends DecreasableHeap<K> {
     private void addRoot(Node n) {
         n.loser = false;
         n.parent = null;
-        n.node = roots.pushBack(n);
+        n.ref = roots.pushBack(n);
         if (min == null || ord.compare(n.key, min.key) < 0)
             min = n;
     }
@@ -37,13 +37,13 @@ public class FibonacciHeap<K> extends DecreasableHeap<K> {
     @Override
     public void deleteMin() {
         assert !isEmpty();
-        min.node.delete();
+        min.ref.delete();
         roots.append(min.children);
         HashMap<Integer, Node> d = new HashMap<>();
         for (Node n : roots) {
             int deg = n.children.size();
             while (d.containsKey(deg))
-                n = n.link(d.remove(deg));
+                n = link(n, d.remove(deg));
             d.put(deg, n);
         }
         roots.clear();
@@ -61,26 +61,27 @@ public class FibonacciHeap<K> extends DecreasableHeap<K> {
         roots.clear();
     }
 
+    private Node link(Node m, Node n) {
+        if (ord.compare(m.key, n.key) < 0) {
+            n.parent = m;
+            n.ref = m.children.pushBack(n);
+            return m;
+        } else {
+            m.parent = n;
+            m.ref = n.children.pushBack(m);
+            return n;
+        }
+    }
+
+
     private class Node extends Decreasable {
 
         private final DoublyLinkedList<Node> children = new DoublyLinkedList<>();
         private boolean loser = false;
         private Node parent = null;
-        private AbstractList<Node>.Deletable node;
+        private Deletable ref;
 
         private Node(K k) { super(k); }
-
-        private Node link(Node n) {
-            if (ord.compare(key, n.key) < 0) {
-                n.parent = this;
-                n.node = children.pushBack(n);
-                return this;
-            } else {
-                parent = n;
-                node = n.children.pushBack(this);
-                return n;
-            }
-        }
 
         @Override
         public void decreaseKey(K k) {
@@ -94,7 +95,7 @@ public class FibonacciHeap<K> extends DecreasableHeap<K> {
             Node n = this;
             while (n.parent != null) {
                 Node p = n.parent;
-                n.node.delete();
+                n.ref.delete();
                 addRoot(n);
                 if (!p.loser) {
                     if (p.parent != null)

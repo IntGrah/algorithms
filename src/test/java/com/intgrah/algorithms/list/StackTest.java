@@ -9,7 +9,7 @@ public abstract class StackTest {
 
     @Test
     public void simpleTest() {
-        Stack<Integer> stack = getInstance();
+        Stack<Integer, ?> stack = getInstance();
 
         stack.pushFront(2);
         stack.pushFront(1);
@@ -22,25 +22,11 @@ public abstract class StackTest {
         assertEquals(2, stack.popFront());
     }
 
-    protected abstract <T> Stack<T> getInstance();
-
-    @Test
-    public void nodeTest() {
-        Stack<Integer> list = getInstance();
-
-        AbstractList<Integer>.Node ref = list.pushFront(1);
-
-        assertEquals(1, ref.getValue());
-
-        ref.setValue(2);
-
-        assertEquals(2, ref.getValue());
-        assertEquals(2, list.popFront());
-    }
+    protected abstract <T> Stack<T, ?> getInstance();
 
     @Test
     public void emptyExceptionTest() {
-        Stack<Integer> list = getInstance();
+        Stack<Integer, ?> list = getInstance();
 
         list.pushFront(1);
 

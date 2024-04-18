@@ -1,7 +1,6 @@
 package com.intgrah.algorithms.heap;
 
 import com.intgrah.algorithms.list.LinkedList;
-import com.intgrah.algorithms.list.Stack;
 
 import java.util.Comparator;
 
@@ -41,7 +40,7 @@ public class LeftistTree<K> extends Heap<K> {
             return n;
         if (n == null)
             return m;
-        Stack<Node> stack = new LinkedList<>();
+        LinkedList<Node> stack = new LinkedList<>();
         while (m != null && n != null) {
             if (ord.compare(m.key, n.key) < 0) {
                 stack.pushFront(m);

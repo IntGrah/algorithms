@@ -10,22 +10,4 @@ public abstract class AbstractList<T> implements Iterable<T> {
 
     abstract void clear();
 
-
-    public abstract class Node {
-
-        protected T value;
-
-        public T getValue() { return value; }
-
-        public void setValue(T v) { value = v; }
-
-    }
-
-
-    public abstract class Deletable extends Node {
-
-        public abstract void delete();
-
-    }
-
 }

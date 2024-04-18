@@ -1,8 +1,7 @@
 package com.intgrah.algorithms.heap;
 
-import com.intgrah.algorithms.list.AbstractList;
+import com.intgrah.algorithms.list.Deletable;
 import com.intgrah.algorithms.list.DoublyLinkedList;
-import com.intgrah.algorithms.list.Queue;
 
 import java.util.Comparator;
 
@@ -28,7 +27,7 @@ public class PairingHeap<K> extends DecreasableHeap<K> {
     @Override
     public void deleteMin() {
         assert !isEmpty();
-        Queue<Node> trees = root.children;
+        DoublyLinkedList<Node> trees = root.children;
         root = null;
         int pairs = trees.size() / 2;
         for (int i = 0; i < pairs; i++)
@@ -36,7 +35,7 @@ public class PairingHeap<K> extends DecreasableHeap<K> {
         while (!trees.isEmpty())
             root = trees.popFront().link(root);
         if (root != null)
-            root.node = null;
+            root.ref = null;
     }
 
     @Override
@@ -48,7 +47,7 @@ public class PairingHeap<K> extends DecreasableHeap<K> {
     private class Node extends Decreasable {
 
         private final DoublyLinkedList<Node> children = new DoublyLinkedList<>();
-        private AbstractList<Node>.Deletable node;
+        private Deletable ref;
 
         private Node(K k) { super(k); }
 
@@ -58,9 +57,9 @@ public class PairingHeap<K> extends DecreasableHeap<K> {
             key = k;
             if (this == root)
                 return;
-            node.delete();
+            ref.delete();
             root = link(root);
-            root.node = null;
+            root.ref = null;
         }
 
         private Node link(Node n) {
@@ -68,10 +67,10 @@ public class PairingHeap<K> extends DecreasableHeap<K> {
             if (n == null)
                 return this;
             if (ord.compare(key, n.key) <= 0) {
-                n.node = children.pushFront(n);
+                n.ref = children.pushFront(n);
                 return this;
             } else {
-                node = n.children.pushFront(this);
+                ref = n.children.pushFront(this);
                 return n;
             }
         }

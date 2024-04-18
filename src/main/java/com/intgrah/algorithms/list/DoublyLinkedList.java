@@ -2,10 +2,11 @@ package com.intgrah.algorithms.list;
 
 import java.util.Iterator;
 
-public class DoublyLinkedList<T> extends AbstractList<T> implements Deque<T> {
+public class DoublyLinkedList<T> extends AbstractList<T> implements
+        Deque<T, DoublyLinkedList<T>.Node> {
 
-    private Node front;
-    private Node back;
+    Node front;
+    Node back;
 
     @Override
     public T getFront() {
@@ -25,7 +26,8 @@ public class DoublyLinkedList<T> extends AbstractList<T> implements Deque<T> {
         return f.value;
     }
 
-    public AbstractList<T>.Deletable pushBack(T value) {
+    @Override
+    public Node pushBack(T value) {
         Node n = new Node(value);
         if (size++ == 0) {
             front = n;
@@ -37,31 +39,34 @@ public class DoublyLinkedList<T> extends AbstractList<T> implements Deque<T> {
         return n;
     }
 
+    @Override
     public T getBack() {
         assert !isEmpty();
         return back.value;
     }
 
+    @Override
     public T popBack() {
         assert !isEmpty();
         Node b = back;
         back = b.prev;
-        if (size-- == 1)
+        if (--size == 0)
             front = null;
         else
-            back.prev = null;
+            back.next = null;
         return b.value;
     }
 
     @Override
-    public AbstractList<T>.Deletable pushFront(T value) {
+    public Node pushFront(T value) {
         Node n = new Node(value);
-        n.next = front;
-        front = n;
-        if (size++ == 0)
+        if (size++ == 0) {
             back = n;
-        else
-            n.next.prev = n;
+        } else {
+            n.next = front;
+            front.prev = n;
+        }
+        front = n;
         return n;
     }
 
@@ -102,15 +107,16 @@ public class DoublyLinkedList<T> extends AbstractList<T> implements Deque<T> {
         };
     }
 
-    private class Node extends AbstractList<T>.Deletable {
+    public class Node implements Deletable {
 
+        private final T value;
         private Node prev;
         private Node next;
 
-        private Node(T v) { value = v; }
+        Node(T v) { value = v; }
 
-        @Override
         public void delete() {
+            assert !isEmpty();
             if (prev == null)
                 front = next;
             else

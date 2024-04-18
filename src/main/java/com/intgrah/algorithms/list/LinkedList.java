@@ -2,7 +2,7 @@ package com.intgrah.algorithms.list;
 
 import java.util.Iterator;
 
-public class LinkedList<T> extends AbstractList<T> implements Stack<T>, Queue<T> {
+public class LinkedList<T> extends AbstractList<T> implements Stack<T, Void>, Queue<T, Void> {
 
     private Node front;
     private Node back;
@@ -12,13 +12,13 @@ public class LinkedList<T> extends AbstractList<T> implements Stack<T>, Queue<T>
         return front.value;
     }
 
-    public Node pushFront(T value) {
+    public Void pushFront(T value) {
         Node n = new Node(value);
         n.next = front;
         front = n;
         if (size++ == 0)
             back = n;
-        return n;
+        return null;
     }
 
     public T popFront() {
@@ -30,24 +30,19 @@ public class LinkedList<T> extends AbstractList<T> implements Stack<T>, Queue<T>
         return f.value;
     }
 
-    public void clear() {
-        front = back = null;
-        size = 0;
-    }
-
     public T getBack() {
         assert !isEmpty();
         return back.value;
     }
 
-    public AbstractList<T>.Node pushBack(T value) {
+    public Void pushBack(T value) {
         Node n = new Node(value);
         if (size++ == 0)
             front = n;
         else
             back.next = n;
         back = n;
-        return n;
+        return null;
     }
 
     public void append(LinkedList<T> l) {
@@ -58,6 +53,11 @@ public class LinkedList<T> extends AbstractList<T> implements Stack<T>, Queue<T>
         back = l.back;
         size += l.size;
         l.clear();
+    }
+
+    public void clear() {
+        front = back = null;
+        size = 0;
     }
 
     @Override
@@ -77,8 +77,9 @@ public class LinkedList<T> extends AbstractList<T> implements Stack<T>, Queue<T>
         };
     }
 
-    public class Node extends AbstractList<T>.Node {
+    private class Node {
 
+        private final T value;
         private Node next;
 
         Node(T v) { value = v; }

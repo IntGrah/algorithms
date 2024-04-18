@@ -1,11 +1,10 @@
 package com.intgrah.algorithms.set;
 
 import com.intgrah.algorithms.list.LinkedList;
-import com.intgrah.algorithms.list.Stack;
 
 public class DisjointSetForest<T> implements DisjointSet<T, DisjointSetForest<T>.Node> {
 
-    Stack<Node> nodes = new LinkedList<>();
+    LinkedList<Node> nodes = new LinkedList<>();
 
     @Override
     public Node push(T v) {

@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 public abstract class Heap<K> {
 
-    protected final Comparator<K> ord;
+    final Comparator<K> ord;
 
     public Heap(Comparator<K> ord) { this.ord = ord; }
 
@@ -16,9 +16,9 @@ public abstract class Heap<K> {
         return min;
     }
 
-    abstract K getMin();
+    public abstract K getMin();
 
-    abstract void deleteMin();
+    public abstract void deleteMin();
 
     public abstract boolean isEmpty();
 

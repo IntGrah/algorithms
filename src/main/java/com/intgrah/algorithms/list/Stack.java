@@ -1,11 +1,11 @@
 package com.intgrah.algorithms.list;
 
-public interface Stack<T> extends List {
+public interface Stack<K, R> extends List<K> {
 
-    T getFront();
+    K getFront();
 
-    AbstractList<T>.Node pushFront(T v);
+    R pushFront(K v);
 
-    T popFront();
+    K popFront();
 
 }

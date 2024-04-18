@@ -1,13 +1,13 @@
 package com.intgrah.algorithms.list;
 
-public interface Queue<T> extends List {
+public interface Queue<K, R> extends List<K> {
 
-    T getFront();
+    K getFront();
 
-    T popFront();
+    K popFront();
 
-    T getBack();
+    K getBack();
 
-    AbstractList<T>.Node pushBack(T v);
+    R pushBack(K v);
 
 }

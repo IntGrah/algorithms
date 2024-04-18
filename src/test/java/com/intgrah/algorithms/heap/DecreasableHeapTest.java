@@ -52,7 +52,8 @@ public abstract class DecreasableHeapTest extends HeapTest {
         }
         for (DecreasableHeap<Integer>.Decreasable node : nodes) {
             int k = node.getKey();
-            if (k % 2 == 1) { node.decreaseKey(k - 500); }
+            if (k % 2 == 1)
+                node.decreaseKey(k - 500);
         }
         for (int i = 0; i < 1000; i++)
             assertEquals(i, pq.popMin());

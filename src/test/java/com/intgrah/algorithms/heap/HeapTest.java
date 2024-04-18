@@ -37,6 +37,50 @@ public abstract class HeapTest {
     }
 
     @Test
+    public void duplicateTest() {
+        Heap<Integer> pq = getInstance(Integer::compareTo);
+
+        pq.push(4);
+        pq.push(4);
+        pq.push(3);
+        assertEquals(3, pq.popMin());
+        assertEquals(4, pq.popMin());
+        pq.push(2);
+        pq.push(5);
+        pq.push(2);
+        pq.push(5);
+        assertEquals(2, pq.popMin());
+        assertEquals(2, pq.popMin());
+        assertEquals(4, pq.popMin());
+        pq.push(0);
+        pq.push(1);
+        pq.push(2);
+        assertEquals(0, pq.popMin());
+        pq.push(0);
+        pq.push(0);
+        pq.push(0);
+        assertEquals(0, pq.popMin());
+        assertEquals(0, pq.popMin());
+        assertEquals(0, pq.popMin());
+        assertEquals(1, pq.popMin());
+        assertEquals(2, pq.popMin());
+        assertEquals(5, pq.popMin());
+        assertEquals(5, pq.popMin());
+        assertTrue(pq.isEmpty());
+    }
+
+    @Test
+    public void allSameTest() {
+        Heap<Integer> pq = getInstance(Integer::compareTo);
+
+        for (int i = 0; i < 1000; i++)
+            pq.push(0);
+        for (int i = 0; i < 1000; i++)
+            assertEquals(0, pq.popMin());
+        assertTrue(pq.isEmpty());
+    }
+
+    @Test
     public void emptyExceptionTest() {
         Heap<Integer> pq = getInstance(Integer::compareTo);
 

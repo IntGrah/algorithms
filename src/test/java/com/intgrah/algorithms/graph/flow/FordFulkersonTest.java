@@ -22,11 +22,9 @@ public abstract class FordFulkersonTest {
         g.putEdge(2, 3, 10);
 
         Graph<Integer, Integer> flow = ff.maxFlow(g, 0, 3);
-        for (int u : flow.getVertices()) {
-            for (int v : flow.getNeighbors(u)) {
-                System.out.printf("%d, %d: %d\n", u, v, flow.getEdge(u, v));
-            }
-        }
+        for (int u : flow.getVertices())
+            for (int v : flow.getNeighbors(u))
+                flow.getEdge(u, v);
     }
 
     protected abstract FordFulkerson<Integer, Integer> getInstance();
