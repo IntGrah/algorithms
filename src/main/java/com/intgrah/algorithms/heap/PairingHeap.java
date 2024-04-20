@@ -14,8 +14,22 @@ public class PairingHeap<K> extends DecreasableHeap<K> {
     @Override
     public Decreasable pushRef(K k) {
         Node n = new Node(k);
-        root = n.link(root);
+        root = link(root, n);
         return n;
+    }
+
+    private Node link(Node m, Node n) {
+        if (m == null)
+            return n;
+        if (n == null)
+            return m;
+        if (ord.compare(m.key, n.key) <= 0) {
+            n.ref = m.children.pushFront(n);
+            return m;
+        } else {
+            m.ref = n.children.pushFront(m);
+            return n;
+        }
     }
 
     @Override
@@ -31,9 +45,9 @@ public class PairingHeap<K> extends DecreasableHeap<K> {
         root = null;
         int pairs = trees.size() / 2;
         for (int i = 0; i < pairs; i++)
-            trees.pushBack(trees.popFront().link(trees.popFront()));
+            trees.pushBack(link(trees.popFront(), trees.popFront()));
         while (!trees.isEmpty())
-            root = trees.popFront().link(root);
+            root = link(root, trees.popFront());
         if (root != null)
             root.ref = null;
     }
@@ -58,21 +72,8 @@ public class PairingHeap<K> extends DecreasableHeap<K> {
             if (this == root)
                 return;
             ref.delete();
-            root = link(root);
+            root = link(root, this);
             root.ref = null;
-        }
-
-        private Node link(Node n) {
-            assert n != this;
-            if (n == null)
-                return this;
-            if (ord.compare(key, n.key) <= 0) {
-                n.ref = children.pushFront(n);
-                return this;
-            } else {
-                ref = n.children.pushFront(this);
-                return n;
-            }
         }
 
     }

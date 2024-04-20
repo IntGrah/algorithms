@@ -1,7 +1,5 @@
 package com.intgrah.algorithms.heap;
 
-import com.intgrah.algorithms.list.LinkedList;
-
 import java.util.Comparator;
 
 public class LeftistTree<K> extends Heap<K> {
@@ -14,7 +12,7 @@ public class LeftistTree<K> extends Heap<K> {
 
     @Override
     public void push(K k) {
-        root = merge(root, new Node(k));
+        root = link(root, new Node(k));
     }
 
     @Override
@@ -26,7 +24,7 @@ public class LeftistTree<K> extends Heap<K> {
     @Override
     public void deleteMin() {
         assert !isEmpty();
-        root = merge(root.left, root.right);
+        root = link(root.left, root.right);
     }
 
     @Override
@@ -35,38 +33,26 @@ public class LeftistTree<K> extends Heap<K> {
     @Override
     public void clear() { root = null; }
 
-    private Node merge(Node m, Node n) {
+    private Node link(Node m, Node n) {
         if (m == null)
             return n;
         if (n == null)
             return m;
-        LinkedList<Node> stack = new LinkedList<>();
-        while (m != null && n != null) {
-            if (ord.compare(m.key, n.key) < 0) {
-                stack.pushFront(m);
-                m = m.right;
+        if (ord.compare(m.key, n.key) > 0)
+            return link(n, m);
+        Node r = link(m.right, n);
+        if (m.left == null) {
+            m.left = r;
+        } else {
+            if (m.left.s < r.s) {
+                m.right = m.left;
+                m.left = r;
             } else {
-                stack.pushFront(n);
-                n = n.right;
+                m.right = r;
             }
+            m.s = m.right.s + 1;
         }
-        Node x = m == null ? n : m;
-        while (!stack.isEmpty()) {
-            Node p = stack.popFront();
-            if (p.left == null) {
-                p.left = x;
-            } else {
-                if (p.left.s < x.s) {
-                    p.right = p.left;
-                    p.left = x;
-                } else {
-                    p.right = x;
-                }
-                p.s = p.right.s + 1;
-            }
-            x = p;
-        }
-        return x;
+        return m;
     }
 
     private class Node {

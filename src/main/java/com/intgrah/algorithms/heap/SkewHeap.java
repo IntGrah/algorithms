@@ -1,7 +1,5 @@
 package com.intgrah.algorithms.heap;
 
-import com.intgrah.algorithms.list.LinkedList;
-
 import java.util.Comparator;
 
 public class SkewHeap<K> extends Heap<K> {
@@ -12,7 +10,7 @@ public class SkewHeap<K> extends Heap<K> {
 
     @Override
     public void push(K k) {
-        root = merge(root, new Node(k));
+        root = link(root, new Node(k));
     }
 
     @Override
@@ -24,7 +22,7 @@ public class SkewHeap<K> extends Heap<K> {
     @Override
     public void deleteMin() {
         assert !isEmpty();
-        root = merge(root.left, root.right);
+        root = link(root.left, root.right);
     }
 
     @Override
@@ -33,29 +31,17 @@ public class SkewHeap<K> extends Heap<K> {
     @Override
     public void clear() { root = null; }
 
-    private Node merge(Node m, Node n) {
+    private Node link(Node m, Node n) {
         if (m == null)
             return n;
         if (n == null)
             return m;
-        LinkedList<Node> stack = new LinkedList<>();
-        while (m != null && n != null) {
-            if (ord.compare(m.key, n.key) < 0) {
-                stack.pushFront(m);
-                m = m.right;
-            } else {
-                stack.pushFront(n);
-                n = n.right;
-            }
-        }
-        Node r = m == null ? n : m;
-        while (!stack.isEmpty()) {
-            Node x = stack.popFront();
-            x.right = x.left;
-            x.left = r;
-            r = x;
-        }
-        return r;
+        if (ord.compare(m.key, n.key) > 0)
+            return link(n, m);
+        Node r = link(m.right, n);
+        m.right = m.left;
+        m.left = r;
+        return m;
     }
 
     private class Node {

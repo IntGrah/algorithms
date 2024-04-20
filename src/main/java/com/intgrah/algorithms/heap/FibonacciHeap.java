@@ -73,7 +73,6 @@ public class FibonacciHeap<K> extends DecreasableHeap<K> {
         }
     }
 
-
     private class Node extends Decreasable {
 
         private final DoublyLinkedList<Node> children = new DoublyLinkedList<>();
