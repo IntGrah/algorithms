@@ -19,8 +19,6 @@ Implementations of common data structures and algorithms.
 
 `com.intgrah.algorithms.heap`
 
-The prefix `Basic` in the class name indicates no support for decrease-key operations.
-
 - Binary heap
 - Skew heap
 - Leftist heap
@@ -28,7 +26,10 @@ The prefix `Basic` in the class name indicates no support for decrease-key opera
 - Skew binomial heap
 - Pairing heap
 - Fibonacci heap
-- ~~Strict Fibonacci heap~~
+- Strict Fibonacci heap
+- ~~Rank-pairing heap~~
+- ~~Quake heap~~
+- ~~Violation heap~~
 - ~~Brodal queue~~
 
 ### Search trees
@@ -42,11 +43,9 @@ The prefix `Basic` in the class name indicates no support for decrease-key opera
 - ~~B-tree variants~~
 - Red-black tree
 - ~~Left-leaning red-black tree~~
-- ~~Scapegoat tree~~
 - ~~AA tree~~
 - ~~AVL tree~~
 - ~~Splay tree~~
-- ~~Tango tree~~
 
 ### Shortest path
 
